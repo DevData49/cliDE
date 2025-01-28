@@ -19,12 +19,14 @@ void disableRawMode(){
 	if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)
 		die("tcsetattr");
 }
+
 void enableRawMode() {
 	if(tcgetattr(STDIN_FILENO, &orig_termios) == -1)
 		die("tcgetattr");
 	atexit(disableRawMode);
 	
 	struct termios raw = orig_termios;
+	
 	raw.c_iflag     &= ~(BRKINT | IXON | ICRNL | INPCK | ISTRIP);
 	raw.c_oflag     &= ~(OPOST);
 	raw.c_cflag     |= (CS8);
